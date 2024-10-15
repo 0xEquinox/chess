@@ -1,0 +1,56 @@
+Game Name: game.Chess
+
+Link to Rules: link
+
+Basic Requirements:
+
+    8x8 playing board, only one piece can be on a single square
+
+    Player Black's pieces are in lowercase, Player White's pieces are in uppercase
+
+    Pieces: Each player starts with...
+
+        8 pawns on their second row (black starts from top, white starts from bottom)
+
+        2 rooks in the corners of their first row
+
+        2 knights next to the rooks
+
+        2 bishops are next to the knights
+
+        the white queen on the left of the white king next to the knights
+
+        the black queen and black king above the respective white pieces in the first row for player Black.
+
+    Movement
+
+        rooks can move horizontally or vertically
+
+        bishops can move in diagonals
+
+        queens can move horizontally or vertically or diagonally
+
+        kings can move horizontally or vertically or diagonally by one square
+
+        knights can move one square horizontally or vertically and then one square diagonally outward (away from the original position). This looks like an L shape.
+
+        Pawns move one square vertically, away from the rows where the player's pieces start.
+
+    pieces can capture and remove other pieces by landing on the square that the piece is on
+
+    the game ends when the loser's king is captured (no checkmates), a winner will be declared
+
+Extended Requirements:
+
+    the game ends when an individual's king can be captured on opponents next move but the individual has no move to prevent this from happening (checkmate)
+
+    implement pawn double move (on first move)
+
+    implement en passant (special case where pawn can be captured without landing on the direct square)
+
+    implement pawn promotion (where pawn can convert to a non-king piece if it reaches the end of the chess board)
+
+    implement castling (where king can move behind a rook if not in line of check)
+
+    implement forfeiting and draw offers
+
