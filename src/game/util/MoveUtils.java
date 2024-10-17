@@ -31,6 +31,7 @@ public class MoveUtils {
         int colStep = (toCol > fromCol) ? 1 : -1;
         int row = fromRow + rowStep;
         int col = fromCol + colStep;
+
         while (row != toRow && col != toCol) {
             if (board.getPieceAt(row, col) != null) {
                 return false;

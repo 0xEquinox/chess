@@ -5,22 +5,64 @@ import game.Piece;
 import game.util.Color;
 import game.util.Point;
 
+/**
+ * The King class represents a King chess piece. It handles basic movement rules,
+ * castling, and checks if the King is in check or checkmate.
+ */
 public class King extends Piece {
     private boolean hasMoved;
 
+    /**
+     * Constructs a King piece with the specified color and initializes its state.
+     *
+     * @param color the color of the King (White or Black)
+     */
     public King(Color color) {
         super(color);
         this.hasMoved = false;
     }
 
+    /**
+     * Checks if the King is currently in check (i.e., if any opponent piece
+     * can attack the King's current position).
+     *
+     * @param board the current state of the chess board
+     * @return true if the King is in check, false otherwise
+     */
     public boolean isInCheck(Board board) {
-        return false;
+        // Find the King's position
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = board.getPieceAt(i, j);
+                if (piece == this) {
+                    return board.isSquareAttacked(new Point(j, i), getColor());
+                }
+            }
+        }
+        return false; // This should never happen
     }
 
+    /**
+     * Determines if the King is in checkmate, where no valid moves can save the King.
+     *
+     * @param board the current state of the chess board
+     * @return true if the King is in checkmate, false otherwise
+     */
     public boolean isInCheckmate(Board board) {
+        // Placeholder for checkmate logic
         return false;
     }
 
+    /**
+     * Validates whether a move is legal for the King. The King can move one square
+     * in any direction or perform castling if certain conditions are met.
+     *
+     * @param from the starting position of the King
+     * @param to the target position for the move
+     * @param board the current state of the chess board
+     * @param color the color of the piece attempting the move
+     * @return true if the move is valid, false otherwise
+     */
     @Override
     public boolean isValidMove(Point from, Point to, Board board, Color color) {
         int fromRow = from.getY();
@@ -36,20 +78,26 @@ public class King extends Piece {
         if (rowDiff <= 1 && colDiff <= 1) {
             Piece destinationPiece = board.getPieceAt(toCol, toRow);
             if (destinationPiece == null || destinationPiece.getColor() != getColor()) {
-                return board.isSquareAttacked(to, getColor());
+                return !board.isSquareAttacked(to, getColor());
             }
         }
 
         // Castling: Check if the move is a castling move
         if (!hasMoved && rowDiff == 0 && Math.abs(toCol - fromCol) == 2) {
-            // Castling conditions
             return isCastlingValid(from, to, board);
         }
 
         return false;
     }
 
-    // Castling-specific checks
+    /**
+     * Checks whether castling is valid under the current game conditions.
+     *
+     * @param from the starting position of the King
+     * @param to the target position for the castling move
+     * @param board the current state of the chess board
+     * @return true if castling is valid, false otherwise
+     */
     private boolean isCastlingValid(Point from, Point to, Board board) {
         int fromCol = from.getX();
         int toCol = to.getX();
@@ -62,13 +110,13 @@ public class King extends Piece {
         // Get the Rook
         Piece rook = board.getPieceAt(rookCol, row);
         if (!(rook instanceof Rook) || ((Rook) rook).hasMoved()) {
-            return false;  // Invalid if the Rook has moved or is missing
+            return false; // Invalid if the Rook has moved or is missing
         }
 
         // Ensure all squares between the King and Rook are empty
         int direction = isKingside ? 1 : -1;
         for (int col = fromCol + direction; col != rookCol; col += direction) {
-            if (board.getPieceAt(col, row) != null) {
+            if (board.getPieceAt(row, col) != null) {
                 return false;
             }
         }
@@ -76,22 +124,31 @@ public class King extends Piece {
         // Ensure the King is not in check, doesn't pass through check, and doesn't land in check
         for (int col = fromCol; col != toCol + direction; col += direction) {
             if (board.isSquareAttacked(new Point(col, row), getColor())) {
-                return false;  // Castling fails if any square is under attack
+                return false; // Castling fails if any square is under attack
             }
         }
+
+        // Move the Rook to the appropriate position for castling
+        board.movePiece(new Point(rookCol, row), new Point(toCol - direction, row), getColor());
+        ((Rook) rook).setHasMoved();
 
         return true;
     }
 
-    public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
+    /**
+     * Marks the King as having moved, preventing further castling.
+     */
+    public void setHasMoved() {
+        this.hasMoved = true;
     }
 
+    /**
+     * Returns the symbol representing the King piece.
+     *
+     * @return '♔' if the King is White, '♚' if the King is Black
+     */
     @Override
     public char getSymbol() {
-        if (getColor() == Color.WHITE) {
-            return '♔';
-        }
-        return '♚';
+        return getColor() == Color.WHITE ? '♔' : '♚';
     }
 }
