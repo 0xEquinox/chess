@@ -24,18 +24,24 @@ public class Queen extends Piece {
      * @return true if the move is valid, false otherwise
      */
     @Override
-    public boolean isValidMove(Point from, Point to, Board board, Color color) {
+    public boolean isValidMove(Point from, Point to, Board board, Color color, boolean checkMode) {
+        if (!super.isValidMove(from, to, board, color, checkMode)) {
+            return false;
+        }
+
         // Ensure the queen is moving either diagonally or horizontally or vertically but not both
         // The condition checks if the start and end points are neither on the same row nor column,
         // and also checks if the move is not blocked by any pieces.
-        if (from.getX() != to.getX() || from.getY() != to.getY() ||
-                !MoveUtils.isDiagonalClear(from.getY(), from.getX(), to.getY(), to.getX(), board)) {
+        if ((from.getX() != to.getX()) && (from.getY() != to.getY()) &&
+                !MoveUtils.isDiagonalMove(from, to)) {
             return false; // Invalid move if not on the same line or blocked
         }
 
         // Check for clear path either diagonally, horizontally, or vertically
-        return MoveUtils.isDiagonalClear(from.getY(), from.getX(), to.getY(), to.getX(), board) ||
-                MoveUtils.isHorizontalClear(from.getY(), from.getX(), to.getY(), to.getX(), board) ||
+        if (MoveUtils.isDiagonalMove(from, to)) {
+            return MoveUtils.isDiagonalClear(from.getY(), from.getX(), to.getY(), to.getX(), board);
+        }
+        return MoveUtils.isHorizontalClear(from.getY(), from.getX(), to.getY(), to.getX(), board) ||
                 MoveUtils.isVerticalClear(from.getY(), from.getX(), to.getY(), to.getX(), board);
     }
 

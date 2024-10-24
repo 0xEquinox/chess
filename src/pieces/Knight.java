@@ -24,8 +24,8 @@ public class Knight extends Piece {
      * @return true if the move is valid, false otherwise
      */
     @Override
-    public boolean isValidMove(Point from, Point to, Board board, Color color) {
-        if (getColor() != color) {
+    public boolean isValidMove(Point from, Point to, Board board, Color color, boolean checkMode) {
+        if (!super.isValidMove(from, to, board, color, checkMode)) {
             return false;
         }
 

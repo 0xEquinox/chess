@@ -27,7 +27,11 @@ public class Rook extends Piece {
      * @return true if the move is valid, false otherwise
      */
     @Override
-    public boolean isValidMove(Point from, Point to, Board board, Color color) {
+    public boolean isValidMove(Point from, Point to, Board board, Color color, boolean checkMode) {
+        if (!super.isValidMove(from, to, board, color, checkMode)) {
+            return false;
+        }
+
         // Ensure that the move is not diagonal; the rook can only move horizontally or vertically
         if (to.getX() != from.getX() && to.getY() != from.getY()) {
             return false; // Invalid move if not on the same row or column

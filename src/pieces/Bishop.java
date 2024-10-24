@@ -6,6 +6,7 @@ import game.util.Color;
 import game.util.MoveUtils;
 import game.util.Point;
 
+
 /**
  * The Bishop class represents a Bishop chess piece. It extends the abstract Piece class
  * and implements the specific movement and symbol of a Bishop.
@@ -33,30 +34,17 @@ public class Bishop extends Piece {
      * @return true if the move is valid, false otherwise
      */
     @Override
-    public boolean isValidMove(Point from, Point to, Board board, Color color) {
-        // Ensure that the piece's color matches the color of the current player
-        if (color != getColor()) {
+    public boolean isValidMove(Point from, Point to, Board board, Color color, boolean checkMode) {
+        if (!super.isValidMove(from, to, board, color, checkMode)) {
             return false;
         }
         // Check if the move follows a diagonal path
-        if (!isDiagonalMove(from, to)) {
+        if (!MoveUtils.isDiagonalMove(from, to)) {
             return false;
         }
 
         // Check if the diagonal path is clear of obstacles
         return MoveUtils.isDiagonalClear(from.getY(), from.getX(), to.getY(), to.getX(), board);
-    }
-
-    /**
-     * Checks if a move is diagonal by comparing the absolute difference
-     * between the X and Y coordinates.
-     *
-     * @param from the starting position of the Bishop
-     * @param to the target position for the move
-     * @return true if the move is diagonal, false otherwise
-     */
-    private boolean isDiagonalMove(Point from, Point to) {
-        return Math.abs(from.getX() - to.getX()) == Math.abs(from.getY() - to.getY());
     }
 
     /**

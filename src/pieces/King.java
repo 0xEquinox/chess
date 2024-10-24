@@ -35,7 +35,7 @@ public class King extends Piece {
             for (int j = 0; j < 8; j++) {
                 Piece piece = board.getPieceAt(i, j);
                 if (piece == this) {
-                    return board.isSquareAttacked(new Point(j, i), getColor());
+                    return board.isSquareAttacked(new Point(j, i), getColor(), true);
                 }
             }
         }
@@ -49,8 +49,28 @@ public class King extends Piece {
      * @return true if the King is in checkmate, false otherwise
      */
     public boolean isInCheckmate(Board board) {
-        // Placeholder for checkmate logic
-        return false;
+        // Check if the King is in check
+        if (!isInCheck(board)) {
+            return false;
+        }
+
+        // Check if the King can move to a square that would save it
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = board.getPieceAt(i, j);
+                if (piece != null && piece.getColor() != getColor()) {
+                    Point from = new Point(j, i);
+                    Color attackingColor = piece.getColor();
+
+                    // If an opponent's piece can move to this square, it is under attack
+                    if (piece.isValidMove(from, new Point(j, i), board, attackingColor, true)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -64,7 +84,11 @@ public class King extends Piece {
      * @return true if the move is valid, false otherwise
      */
     @Override
-    public boolean isValidMove(Point from, Point to, Board board, Color color) {
+    public boolean isValidMove(Point from, Point to, Board board, Color color, boolean checkMode) {
+        if (!super.isValidMove(from, to, board, color, checkMode)) {
+            return false;
+        }
+
         int fromRow = from.getY();
         int fromCol = from.getX();
         int toRow = to.getY();
@@ -78,7 +102,7 @@ public class King extends Piece {
         if (rowDiff <= 1 && colDiff <= 1) {
             Piece destinationPiece = board.getPieceAt(toCol, toRow);
             if (destinationPiece == null || destinationPiece.getColor() != getColor()) {
-                return !board.isSquareAttacked(to, getColor());
+                return !board.isSquareAttacked(to, getColor(), false);
             }
         }
 
@@ -123,7 +147,7 @@ public class King extends Piece {
 
         // Ensure the King is not in check, doesn't pass through check, and doesn't land in check
         for (int col = fromCol; col != toCol + direction; col += direction) {
-            if (board.isSquareAttacked(new Point(col, row), getColor())) {
+            if (board.isSquareAttacked(new Point(col, row), getColor(), false)) {
                 return false; // Castling fails if any square is under attack
             }
         }

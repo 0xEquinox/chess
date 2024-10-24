@@ -28,8 +28,8 @@ public class Testing {
         Piece knight = board.getPieceAt(start.getX(), start.getY());
 
         // Valid L-shaped moves
-        assertTrue(knight.isValidMove(start, new Point(0, 5), board, Color.WHITE));  // a3
-        assertTrue(knight.isValidMove(start, new Point(2, 5), board, Color.WHITE));  // c3
+        assertTrue(knight.isValidMove(start, new Point(0, 5), board, Color.WHITE, false));  // a3
+        assertTrue(knight.isValidMove(start, new Point(2, 5), board, Color.WHITE, false));  // c3
     }
 
     // Test invalid Knight movement
@@ -40,8 +40,8 @@ public class Testing {
         Piece knight = board.getPieceAt(start.getY(), start.getX());
 
         // Invalid moves (not L-shaped)
-        assertFalse(knight.isValidMove(start, new Point(1, 5), board, Color.WHITE));  // vertical move
-        assertFalse(knight.isValidMove(start, new Point(3, 7), board, Color.WHITE));  // horizontal move
+        assertFalse(knight.isValidMove(start, new Point(1, 5), board, Color.WHITE, false));  // vertical move
+        assertFalse(knight.isValidMove(start, new Point(3, 7), board, Color.WHITE, false));  // horizontal move
     }
 
     // Test valid Pawn movement
@@ -52,8 +52,8 @@ public class Testing {
         Piece pawn = board.getPieceAt(start.getY(), start.getX());
 
         // Valid moves: one square forward or two squares forward on the first move
-        assertTrue(pawn.isValidMove(start, new Point(4, 5), board, Color.WHITE));  // e3
-        assertTrue(pawn.isValidMove(start, new Point(4, 4), board, Color.WHITE));  // e4
+        assertTrue(pawn.isValidMove(start, new Point(4, 5), board, Color.WHITE, false));  // e3
+        assertTrue(pawn.isValidMove(start, new Point(4, 4), board, Color.WHITE, false));  // e4
     }
 
     // Test invalid Pawn movement
@@ -64,8 +64,8 @@ public class Testing {
         Piece pawn = board.getPieceAt(start.getX(), start.getY());
 
         // Invalid move: pawns can't move backward or sideways
-        assertFalse(pawn.isValidMove(start, new Point(3, 6), board, Color.WHITE));  // moving left
-        assertFalse(pawn.isValidMove(start, new Point(4, 7), board, Color.WHITE));  // moving backward
+        assertFalse(pawn.isValidMove(start, new Point(3, 6), board, Color.WHITE, false));  // moving left
+        assertFalse(pawn.isValidMove(start, new Point(4, 7), board, Color.WHITE, false));  // moving backward
     }
 
     // Test valid King movement
@@ -76,8 +76,8 @@ public class Testing {
         Piece king = board.getPieceAt(start.getX(), start.getY());
 
         // Valid one-square moves
-        assertTrue(king.isValidMove(start, new Point(4, 6), board, Color.WHITE));  // e2
-        assertTrue(king.isValidMove(start, new Point(5, 6), board, Color.WHITE));  // f2
+        assertTrue(king.isValidMove(start, new Point(4, 6), board, Color.WHITE, false));  // e2
+        assertTrue(king.isValidMove(start, new Point(5, 6), board, Color.WHITE, false));  // f2
     }
 
     // Test invalid King movement (moving into check)
@@ -91,7 +91,7 @@ public class Testing {
         board.placePiece(new Rook(Color.BLACK), new Point(4, 4));  // Rook at (4, 4)
 
         // Moving to e2 would place the King in check from the Rook
-        assertFalse(king.isValidMove(start, new Point(4, 6), board, Color.WHITE));  // e2
+        assertFalse(king.isValidMove(start, new Point(4, 6), board, Color.WHITE, false));  // e2
     }
 
     // Test castling (valid case)
@@ -105,7 +105,7 @@ public class Testing {
         Piece king = board.getPieceAt(kingStart.getX(), kingStart.getY());
 
         // Assume no squares between King and Rook are under attack, and Rook is at (7, 7)
-        assertTrue(king.isValidMove(kingStart, new Point(6, 7), board, Color.WHITE));  // Castling (King side)
+        assertTrue(king.isValidMove(kingStart, new Point(6, 7), board, Color.WHITE, false));  // Castling (King side)
     }
 
     // Test invalid castling (King has moved)
@@ -118,7 +118,7 @@ public class Testing {
          king.setHasMoved();  // King has moved
 
         // Now castling should be invalid
-        assertFalse(king.isValidMove(kingStart, new Point(6, 7), board, Color.WHITE));  // Castling
+        assertFalse(king.isValidMove(kingStart, new Point(6, 7), board, Color.WHITE, false));  // Castling
     }
 
     // Test isSquareAttacked method
@@ -129,10 +129,10 @@ public class Testing {
 
         // Check if square (4, 7) (e1) is attacked by the Rook
         Point square = new Point(4, 7);
-        assertTrue(board.isSquareAttacked(square, Color.WHITE));  // e1 is attacked by Rook
+        assertTrue(board.isSquareAttacked(square, Color.WHITE, false));  // e1 is attacked by Rook
 
         // Check if square (5, 7) (f1) is not attacked by the Rook
         square = new Point(5, 7);
-        assertFalse(board.isSquareAttacked(square, Color.WHITE));  // f1 is not attacked
+        assertFalse(board.isSquareAttacked(square, Color.WHITE, false));  // f1 is not attacked
     }
 }

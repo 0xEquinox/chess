@@ -54,8 +54,8 @@ public class Chess extends AbstractStrategyGame {
         King[] kings = board.getKings();
         for (King king : kings) {
             if (king.isInCheckmate(board)) {
-                // Return 1 if White's king is checkmated, 2 if Black's king is checkmated
-                return king.getColor() == Color.WHITE ? 1 : 2;
+                // Return 2 if White's king is checkmated, 1 if Black's king is checkmated
+                return king.getColor() == Color.WHITE ? 2 : 1;
             }
         }
         return -1;  // No winner yet

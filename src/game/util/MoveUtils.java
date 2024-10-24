@@ -41,4 +41,17 @@ public class MoveUtils {
         }
         return true;
     }
+
+    /**
+     * Checks if a move is diagonal by comparing the absolute difference
+     * between the X and Y coordinates.
+     *
+     * @param from the starting position of the Bishop
+     * @param to the target position for the move
+     * @return true if the move is diagonal, false otherwise
+     */
+    public static boolean isDiagonalMove(Point from, Point to) {
+        return Math.abs(from.getX() - to.getX()) == Math.abs(from.getY() - to.getY());
+    }
+
 }

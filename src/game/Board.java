@@ -84,7 +84,7 @@ public class Board {
     public void movePiece(Point from, Point to, Color color) throws IllegalArgumentException {
         Piece piece = getPieceAt(from.getY(), from.getX());
 
-        if (piece.isValidMove(from, to, this, color)) {
+        if (piece.isValidMove(from, to, this, color, false)) {
             this.board[to.getY()][to.getX()] = piece;
 
             // Track if the piece has moved for future logic (e.g., castling)
@@ -134,7 +134,7 @@ public class Board {
      * @param defendingColor the color of the piece defending the square
      * @return true if the square is attacked, false otherwise
      */
-    public boolean isSquareAttacked(Point square, Color defendingColor) {
+    public boolean isSquareAttacked(Point square, Color defendingColor, boolean checkMode) {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Piece piece = getPieceAt(row, col);
@@ -145,7 +145,7 @@ public class Board {
                     Color attackingColor = piece.getColor();
 
                     // If an opponent's piece can move to this square, it is under attack
-                    if (piece.isValidMove(from, square, this, attackingColor)) {
+                    if (piece.isValidMove(from, square, this, attackingColor, checkMode)) {
                         return true;
                     }
                 }

@@ -2,13 +2,14 @@ package game;
 
 import game.util.Color;
 import game.util.Point;
+import pieces.King;
 
 /**
  * The Piece class represents a generic chess piece. It is an abstract class that other specific pieces
  * (e.g., Rook, Knight, Bishop) will extend. It contains common functionality shared by all chess pieces.
  */
 public abstract class Piece {
-    private Color color;  // The color of the piece, either White or Black
+    private final Color color;  // The color of the piece, either White or Black
 
     /**
      * Constructor for a Piece.
@@ -38,7 +39,22 @@ public abstract class Piece {
      * @param color the color of the piece attempting the move
      * @return true if the move is valid, false otherwise
      */
-    public abstract boolean isValidMove(Point from, Point to, Board board, Color color);
+    public boolean isValidMove(Point from, Point to, Board board, Color color, boolean checkMode) {
+        if (color != getColor()) {
+            return false;
+        }
+
+        Piece piece = board.getPieceAt(to.getY(), to.getX());
+        if (piece == null) {
+            return true;
+        }
+
+        if (!checkMode && piece instanceof King) {
+            return false;
+        }
+
+        return piece.color != color;
+    }
 
     /**
      * Returns the symbol representing the piece (e.g., 'R' for Rook, 'N' for Knight).

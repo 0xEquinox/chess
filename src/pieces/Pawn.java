@@ -34,9 +34,8 @@ public class Pawn extends Piece {
      * @return true if the move is valid, false otherwise
      */
     @Override
-    public boolean isValidMove(Point from, Point to, Board board, Color playerColor) {
-        // Check if the piece being moved is owned by the current player
-        if (playerColor != getColor()) {
+    public boolean isValidMove(Point from, Point to, Board board, Color playerColor, boolean checkMode) {
+        if (!super.isValidMove(from, to, board, playerColor, checkMode)) {
             return false;
         }
 
